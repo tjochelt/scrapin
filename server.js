@@ -27,40 +27,49 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-mongoose.connect("mongodb://localhost/unit18Populater", { useNewUrlParser: true });
+mongoose.connect(
+  "mongodb://localhost/scrapin",
+  { useNewUrlParser: true }
+);
 
 // Routes
 
 // A GET route for scraping the echoJS website
 app.get("/scrape", function(req, res) {
+  const url = "http://www.chicagotribune.com";
   // First, we grab the body of the html with axios
-  axios.get("http://www.echojs.com/").then(function(response) {
+  axios.get(url).then(function(response) {
+    // console.log("tom says", response);
     // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(response.data);
-
+    console.log("tom says", $);
     // Now, we grab every h2 within an article tag, and do the following:
     $("article h2").each(function(i, element) {
       // Save an empty result object
       var result = {};
-
+      console.log("result says", result);
       // Add the text and href of every link, and save them as properties of the result object
       result.title = $(this)
         .children("a")
         .text();
-      result.link = $(this)
-        .children("a")
-        .attr("href");
-
+      result.link =
+        url +
+        $(this)
+          .children("a")
+          .attr("href");
+      console.log("tom says", result.title);
+      console.log("lulu says", result.link);
       // Create a new Article using the `result` object built from scraping
       db.Article.create(result)
         .then(function(dbArticle) {
           // View the added result in the console
-          console.log(dbArticle);
+          console.log("hello", dbArticle);
         })
         .catch(function(err) {
           // If an error occurred, log it
           console.log(err);
         });
+      console.log("what came first");
     });
 
     // Send a message to the client
@@ -106,7 +115,11 @@ app.post("/articles/:id", function(req, res) {
       // If a Note was created successfully, find one Article with an `_id` equal to `req.params.id`. Update the Article to be associated with the new Note
       // { new: true } tells the query that we want it to return the updated User -- it returns the original by default
       // Since our mongoose query returns a promise, we can chain another `.then` which receives the result of the query
-      return db.Article.findOneAndUpdate({ _id: req.params.id }, { note: dbNote._id }, { new: true });
+      return db.Article.findOneAndUpdate(
+        { _id: req.params.id },
+        { note: dbNote._id },
+        { new: true }
+      );
     })
     .then(function(dbArticle) {
       // If we were able to successfully update an Article, send it back to the client
