@@ -15,6 +15,7 @@ $.getJSON("/articles", function(data) {
     $("#articles").append(
       "<a href=" + data[i].link + "  target='_blank'>Read Article</a>"
     );
+    $("#articles").append("<hr>");
   }
 });
 
@@ -34,11 +35,15 @@ $(document).on("click", "p", function() {
     .then(function(data) {
       console.log("this is the data", data);
       // The title of the article
-      $("#notes").append("<h2>" + data.title + "</h2>");
+      $("#notes").append("<h2>" + data.title + "</h2><br>");
       // An input to enter a new title
-      $("#notes").append("<input id='titleinput' name='title' >");
+      $("#notes").append(
+        "<input id='titleinput' name='title' placeholder='Comment title'><br>"
+      );
       // A textarea to add a new note body
-      $("#notes").append("<textarea id='bodyinput' name='body'></textarea>");
+      $("#notes").append(
+        "<textarea id='bodyinput' name='body' placeholder='Enter a comment'></textarea><br>"
+      );
       // A button to submit a new note, with the id of the article saved to it
       $("#notes").append(
         "<button data-id='" + data._id + "' id='savenote'>Save Note</button>"
@@ -48,9 +53,12 @@ $(document).on("click", "p", function() {
       // If there's a note in the article
       if (data.note) {
         // Place the title of the note in the title input
-        $("#previousNotes").append("<p>" + data.note.title + "</p>");
+        $("#previousNotes").append(
+          "<p>" + data.note.title + "<br>" + data.note.body + "</p>"
+        );
+        $("#previousNotes").append("<p>" + data.note.body + "</p>");
         // Place the body of the note in the body textarea
-        $("#bodyinput").val(data.note.body);
+        // $("#bodyinput").val(data.note.body);
       }
     });
 });
