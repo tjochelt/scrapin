@@ -46,7 +46,9 @@ $(document).on("click", "p", function() {
       );
       // A button to submit a new note, with the id of the article saved to it
       $("#notes").append(
-        "<button data-id='" + data._id + "' id='savenote'>Save Note</button>"
+        "<button data-id='" +
+          data._id +
+          "' id='savenote'>Save Note</button><br>"
       );
       // $("#previousNotes").append("<div id='X'> </div>");
 
@@ -54,7 +56,11 @@ $(document).on("click", "p", function() {
       if (data.note) {
         // Place the title of the note in the title input
         $("#previousNotes").append(
-          "<p>" + data.note.title + "<br>" + data.note.body + "</p>"
+          "<h2>Comments</h2><hr><p>" +
+            data.note.title +
+            "<br>" +
+            data.note.body +
+            "</p>"
         );
         $("#previousNotes").append("<p>" + data.note.body + "</p>");
         // Place the body of the note in the body textarea
