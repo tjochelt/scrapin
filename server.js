@@ -27,10 +27,7 @@ app.use(express.json());
 app.use(express.static("public"));
 
 // Connect to the Mongo DB
-mongoose.connect(
-  "mongodb://user:password1!>@ds153637.mlab.com:53637/heroku_9d17s4x6",
-  { useNewUrlParser: true }
-);
+mongoose.connect(MONGODB_URI, { useNewUrlParser: true });
 
 // Routes
 
